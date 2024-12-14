@@ -1,0 +1,24 @@
+{
+  "name": "tm-api-prisma",
+  "version": "1.0.0",
+  "description": "Prisma configuration for node.js express projects",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc --build"
+  },
+  "main": "./dist/index.js",
+  "author": "Tournier Maxime",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.0.1",
+    "os": "^0.1.2",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "@types/winston": "^2.4.4",
+    "typescript": "^5.7.2"
+  }
+}
