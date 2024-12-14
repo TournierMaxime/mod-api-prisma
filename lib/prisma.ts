@@ -38,7 +38,7 @@ async function releaseDatabase(): Promise<void> {
   await prisma.$disconnect()
 }
 
-async function executeRawQuery(query: string): Promise<any> {
+async function executeRawQuery(query: any): Promise<any> {
   try {
     const result = await prisma.$queryRaw(query)
     return result
