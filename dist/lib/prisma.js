@@ -1,60 +1,73 @@
 import { PrismaClient } from "@prisma/client";
 import { logger } from "./logger.js";
-const subProcess = "prisma";
-// Prisma instance
-const prisma = new PrismaClient();
-// Database connection
-async function connectToDatabase() {
-    await prisma.$connect();
-}
-async function initDatabase() {
-    try {
-        await connectToDatabase();
-        logger.log("info", {
-            message: `{'subProcess': '${subProcess}', 'message': 'Connection to database established'}`,
-        });
+class PrismaService {
+    constructor(subProcess = "prisma") {
+        this.prisma = new PrismaClient();
+        this.subProcess = subProcess;
     }
-    catch (err) {
+    /**
+     * Establishes a connection to the database.
+     */
+    async connect() {
+        try {
+            await this.prisma.$connect();
+            logger.log("info", {
+                message: `{'subProcess': '${this.subProcess}', 'message': 'Connection to database established'}`,
+            });
+        }
+        catch (err) {
+            this.handleError("Unable to connect to database", err);
+        }
+    }
+    /**
+     * Releases the database connection.
+     */
+    async disconnect() {
+        try {
+            await this.prisma.$disconnect();
+            logger.log("info", {
+                message: `{'subProcess': '${this.subProcess}', 'message': 'Database connection closed'}`,
+            });
+        }
+        catch (err) {
+            this.handleError("Error while disconnecting from the database", err);
+        }
+    }
+    /**
+     * Executes a raw query.
+     * @param query - The raw query to execute.
+     * @returns The result of the query execution.
+     */
+    async executeRawQuery(query) {
+        try {
+            const result = await this.prisma.$queryRaw(query);
+            return result;
+        }
+        catch (err) {
+            this.handleError("Error executing raw query", err);
+            throw err; // Rethrow to allow the caller to handle it.
+        }
+    }
+    /**
+     * Handles errors by logging them.
+     * @param message - The custom message for the error.
+     * @param err - The error object.
+     */
+    handleError(message, err) {
         if (err instanceof Error) {
             logger.error({
-                subProcess,
-                msg: "Unable to init the connection to database",
+                subProcess: this.subProcess,
+                msg: message,
                 errMsg: err.message,
             });
         }
         else {
             logger.error({
-                subProcess,
-                msg: "Unknown error during database connection",
+                subProcess: this.subProcess,
+                msg: message,
                 errMsg: String(err),
             });
         }
     }
 }
-async function releaseDatabase() {
-    await prisma.$disconnect();
-}
-async function executeRawQuery(query) {
-    try {
-        const result = await prisma.$queryRaw(query);
-        return result;
-    }
-    catch (err) {
-        if (err instanceof Error) {
-            logger.error({
-                subProcess,
-                msg: "Error executing raw query",
-                errMsg: err.message,
-            });
-        }
-        else {
-            logger.error({
-                subProcess,
-                msg: "Unknown error executing raw query",
-                errMsg: String(err),
-            });
-        }
-        throw err;
-    }
-}
-export { prisma, initDatabase, releaseDatabase, executeRawQuery };
+export { PrismaService };
