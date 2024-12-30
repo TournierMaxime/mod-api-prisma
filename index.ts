@@ -1,2 +1,7 @@
 export { logger } from "./lib/logger.js"
 export { PrismaService } from "./lib/prisma.js"
+export { PrismaAccessGroupRepository } from "./lib/PrismaAccessGroupRepository.js"
+export { PrismaAccessGroupRuleRepository } from "./lib/PrismaAccessGroupRuleRepository.js"
+export { PrismaAccountRepository } from "./lib/PrismaAccountRepository.js"
+export { PrismaUserRepository } from "./lib/PrismaUserRepository.js"
+export { PrismaUserToAccountAccessGroupRepository } from "./lib/PrismaUserToAccountAccessGroupRepository.js"
