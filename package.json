@@ -1,6 +1,6 @@
 {
   "name": "tm-api-prisma",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Prisma configuration for node.js express projects",
   "type": "module",
   "scripts": {
