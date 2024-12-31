@@ -36,8 +36,14 @@ export class PrismaUserRepository implements UserRepository {
     }
   }
 
+  async createUser(data: any): Promise<any> {
+    return await this.prisma.user.create({
+      data,
+    })
+  }
+
   async getUser(userId: string): Promise<any> {
-    return this.prisma.user.findUnique({
+    return await this.prisma.user.findUnique({
       where: { userId },
       select: {
         userId: true,
@@ -53,13 +59,13 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async updateUser(userId: string, data: any): Promise<void> {
-    await this.prisma.user.update({
+    return await this.prisma.user.update({
       where: { userId },
       data,
     })
   }
 
   async deleteUser(userId: string): Promise<void> {
-    await this.prisma.user.delete({ where: { userId } })
+    return await this.prisma.user.delete({ where: { userId } })
   }
 }

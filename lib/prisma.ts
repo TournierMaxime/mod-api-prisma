@@ -1,13 +1,13 @@
-import { PrismaClient } from "@prisma/client";
-import { logger } from "./logger.js";
+import { PrismaClient } from "@prisma/client"
+import { logger } from "./logger.js"
 
 class PrismaService {
-  private prisma: PrismaClient;
-  private subProcess: string;
+  public prisma: PrismaClient
+  private subProcess: string
 
-  constructor(subProcess = "prisma") {
-    this.prisma = new PrismaClient();
-    this.subProcess = subProcess;
+  constructor(prisma: PrismaClient, subProcess: string) {
+    this.prisma = prisma
+    this.subProcess = subProcess
   }
 
   /**
@@ -15,12 +15,12 @@ class PrismaService {
    */
   async connect(): Promise<void> {
     try {
-      await this.prisma.$connect();
+      await this.prisma.$connect()
       logger.log("info", {
         message: `{'subProcess': '${this.subProcess}', 'message': 'Connection to database established'}`,
-      });
+      })
     } catch (err) {
-      this.handleError("Unable to connect to database", err);
+      this.handleError("Unable to connect to database", err)
     }
   }
 
@@ -29,12 +29,12 @@ class PrismaService {
    */
   async disconnect(): Promise<void> {
     try {
-      await this.prisma.$disconnect();
+      await this.prisma.$disconnect()
       logger.log("info", {
         message: `{'subProcess': '${this.subProcess}', 'message': 'Database connection closed'}`,
-      });
+      })
     } catch (err) {
-      this.handleError("Error while disconnecting from the database", err);
+      this.handleError("Error while disconnecting from the database", err)
     }
   }
 
@@ -45,12 +45,24 @@ class PrismaService {
    */
   async executeRawQuery(query: any): Promise<any> {
     try {
-      const result = await this.prisma.$queryRaw(query);
-      return result;
+      const result = await this.prisma.$queryRaw(query)
+      return result
     } catch (err) {
-      this.handleError("Error executing raw query", err);
-      throw err; // Rethrow to allow the caller to handle it.
+      this.handleError("Error executing raw query", err)
+      throw err // Rethrow to allow the caller to handle it.
     }
+  }
+
+  async findOrCreate(model: any, where = {}, createData = {}): Promise<any> {
+    return this.prisma.$transaction(async () => {
+      let instance = await model.findFirst({ where })
+
+      if (!instance) {
+        instance = await model.create({ data: createData })
+      }
+
+      return [instance]
+    })
   }
 
   /**
@@ -64,15 +76,15 @@ class PrismaService {
         subProcess: this.subProcess,
         msg: message,
         errMsg: err.message,
-      });
+      })
     } else {
       logger.error({
         subProcess: this.subProcess,
         msg: message,
         errMsg: String(err),
-      });
+      })
     }
   }
 }
 
-export { PrismaService };
+export { PrismaService }

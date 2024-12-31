@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import { logger } from "./logger.js";
 class PrismaService {
-    constructor(subProcess = "prisma") {
-        this.prisma = new PrismaClient();
+    constructor(prisma, subProcess) {
+        this.prisma = prisma;
         this.subProcess = subProcess;
     }
     /**
@@ -47,6 +46,15 @@ class PrismaService {
             this.handleError("Error executing raw query", err);
             throw err; // Rethrow to allow the caller to handle it.
         }
+    }
+    async findOrCreate(model, where = {}, createData = {}) {
+        return this.prisma.$transaction(async () => {
+            let instance = await model.findFirst({ where });
+            if (!instance) {
+                instance = await model.create({ data: createData });
+            }
+            return [instance];
+        });
     }
     /**
      * Handles errors by logging them.
