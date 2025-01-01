@@ -50,6 +50,10 @@ export class PrismaAccessGroupRepository implements AccessGroupRepository {
       where: { accessGroupId },
     })
 
+    if (!accessGroup) {
+      throw new Error(`Access group not found`)
+    }
+
     return accessGroup.update({ ...data, accessGroupId })
   }
 }

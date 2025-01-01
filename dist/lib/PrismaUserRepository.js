@@ -14,8 +14,8 @@ export class PrismaUserRepository {
             take: size,
             orderBy: { userId: "desc" },
         };
-        const users = await this.prisma.user.findMany(options);
-        const count = await this.prisma.user.count();
+        const users = await this.prisma.users.findMany(options);
+        const count = await this.prisma.users.count();
         return {
             users,
             count,
@@ -24,12 +24,12 @@ export class PrismaUserRepository {
         };
     }
     async createUser(data) {
-        return await this.prisma.user.create({
+        return await this.prisma.users.create({
             data,
         });
     }
     async getUser(userId) {
-        return await this.prisma.user.findUnique({
+        return await this.prisma.users.findUnique({
             where: { userId },
             select: {
                 userId: true,
@@ -44,12 +44,12 @@ export class PrismaUserRepository {
         });
     }
     async updateUser(userId, data) {
-        return await this.prisma.user.update({
+        return await this.prisma.users.update({
             where: { userId },
             data,
         });
     }
     async deleteUser(userId) {
-        return await this.prisma.user.delete({ where: { userId } });
+        return await this.prisma.users.delete({ where: { userId } });
     }
 }

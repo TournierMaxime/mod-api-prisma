@@ -64,6 +64,10 @@ export class PrismaAccountRepository implements AccountRepository {
       where: { accountId },
     })
 
+    if (!account) {
+      throw new Error(`Account not found`)
+    }
+
     return account.destroy()
   }
 
@@ -88,6 +92,10 @@ export class PrismaAccountRepository implements AccountRepository {
           userId,
         },
       })
+
+    if (!updateUserToAccount) {
+      throw new Error(`User to account not found`)
+    }
 
     updateUserToAccount.accessGroupId = accessGroupId
     return await updateUserToAccount.save()

@@ -35,6 +35,9 @@ export class PrismaAccessGroupRepository {
         const accessGroup = await this.prisma.accessGroups.findUnique({
             where: { accessGroupId },
         });
+        if (!accessGroup) {
+            throw new Error(`Access group not found`);
+        }
         return accessGroup.update({ ...data, accessGroupId });
     }
 }

@@ -25,8 +25,8 @@ export class PrismaUserRepository implements UserRepository {
       orderBy: { userId: "desc" },
     }
 
-    const users = await this.prisma.user.findMany(options)
-    const count = await this.prisma.user.count()
+    const users = await this.prisma.users.findMany(options)
+    const count = await this.prisma.users.count()
 
     return {
       users,
@@ -37,13 +37,13 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async createUser(data: any): Promise<any> {
-    return await this.prisma.user.create({
+    return await this.prisma.users.create({
       data,
     })
   }
 
   async getUser(userId: string): Promise<any> {
-    return await this.prisma.user.findUnique({
+    return await this.prisma.users.findUnique({
       where: { userId },
       select: {
         userId: true,
@@ -59,13 +59,13 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async updateUser(userId: string, data: any): Promise<void> {
-    return await this.prisma.user.update({
+    return await this.prisma.users.update({
       where: { userId },
       data,
     })
   }
 
   async deleteUser(userId: string): Promise<void> {
-    return await this.prisma.user.delete({ where: { userId } })
+    return await this.prisma.users.delete({ where: { userId } })
   }
 }

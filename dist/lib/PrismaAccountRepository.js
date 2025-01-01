@@ -46,6 +46,9 @@ export class PrismaAccountRepository {
         const account = await this.prisma.accounts.findUnique({
             where: { accountId },
         });
+        if (!account) {
+            throw new Error(`Account not found`);
+        }
         return account.destroy();
     }
     async deleteAccountUser(accountId, userId) {
@@ -61,6 +64,9 @@ export class PrismaAccountRepository {
                 userId,
             },
         });
+        if (!updateUserToAccount) {
+            throw new Error(`User to account not found`);
+        }
         updateUserToAccount.accessGroupId = accessGroupId;
         return await updateUserToAccount.save();
     }

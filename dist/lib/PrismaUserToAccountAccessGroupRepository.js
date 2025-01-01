@@ -10,6 +10,12 @@ export class PrismaUserToAccountAccessGroupRepository {
             where: { accessGroupId },
         });
         const user = await this.prisma.users.findFirst({ where: { email } });
+        if (!accessGroup) {
+            throw new Error(`Access group with ID ${accessGroupId} not found`);
+        }
+        if (!user) {
+            throw new Error(`User with email ${email} not found`);
+        }
         return this.prisma.userToAccountAccessGroup.create({
             data: {
                 accountId,

@@ -71,6 +71,10 @@ export class PrismaAuthRepository implements AuthRepository {
       where: { userId },
     })
 
+    if (!user) {
+      throw new Error(`User not found`)
+    }
+
     if (verificationCode === user.verificationCode) {
       await this.prisma.users.update({
         where: { userId: user.userId },
@@ -106,6 +110,10 @@ export class PrismaAuthRepository implements AuthRepository {
     const user = await this.prisma.users.findFirst({
       where: { email: data.email },
     })
+
+    if (!user) {
+      throw new Error(`User with email ${data.email} not found`)
+    }
 
     const code = Math.floor(100000 + Math.random() * 900000)
 
@@ -153,6 +161,10 @@ export class PrismaAuthRepository implements AuthRepository {
     const user = await this.prisma.users.findFirst({
       where: { email: data.email },
     })
+
+    if (!user) {
+      throw new Error(`User with email ${data.email} not found`)
+    }
 
     if (data.password === data.confirmPassword) {
       await this.prisma.users.update({
