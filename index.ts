@@ -4,6 +4,7 @@ import { Keys } from "tm-api-common"
 
 export { logger } from "./lib/logger.js"
 export { PrismaService } from "./lib/prisma.js"
+export { PrismaAuthRepository } from "./lib/PrismaAuthRepository.js"
 export { PrismaAccessGroupRepository } from "./lib/PrismaAccessGroupRepository.js"
 export { PrismaAccessGroupRuleRepository } from "./lib/PrismaAccessGroupRuleRepository.js"
 export { PrismaAccountRepository } from "./lib/PrismaAccountRepository.js"
