@@ -10,6 +10,6 @@
     "typeRoots": ["./node_modules/@types", "./types"],
     "moduleResolution": "node"
   },
-  "include": ["lib/**/*.ts", "types/**/*.d.ts", "index.ts"],
+  "include": ["lib/**/*.ts", "types/**/*.d.ts", "index.ts", "scripts/**/*.ts"],
   "exclude": ["node_modules"]
 }
